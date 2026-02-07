@@ -1,103 +1,107 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Globe, ShieldCheck, Activity } from 'lucide-react';
+import { ArrowRight, Globe, ShieldCheck, Activity, Rocket } from 'lucide-react';
 import EarthBackground from '../components/EarthBackground';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [isExiting, setIsExiting] = useState(false);
 
-  const handleInitialize = (e) => {
-    e.preventDefault();
-    navigate('/dashboard');
+  const handleUplink = () => {
+    setIsExiting(true);
+    // Wait for the zoom animation to finish before navigating
+    setTimeout(() => {
+      navigate('/login');
+    }, 800);
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-white bg-space-950">
-      <motion.div 
-        className="absolute inset-0 z-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, transition: { duration: 0.5 } }} 
-        transition={{ duration: 2.0, ease: "easeOut" }}
-      >
+    <div className="relative min-h-screen bg-black overflow-hidden text-white selection:bg-blue-500/30">
+      
+      {/* 3D Background Layer - Appears First */}
+      <div className="absolute inset-0 z-0">
         <EarthBackground />
-      </motion.div>
+      </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-space-950 via-space-950/40 to-transparent pointer-events-none z-0"></div>
+      {/* Overlay Gradient */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/20 via-black/40 to-black pointer-events-none" />
 
+      {/* Content Layer with Animations */}
       <motion.div 
-        className="relative z-10 max-w-5xl px-6 text-center"
-        exit={{ 
-          opacity: 0, 
-          scale: 1.5, 
-          filter: "blur(10px)", 
-          transition: { duration: 0.5, ease: "easeInOut" }
-        }}
+        className="relative z-20 container mx-auto px-6 h-screen flex flex-col justify-center items-center text-center"
+        animate={isExiting ? { scale: 20, opacity: 0 } : { scale: 1, opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
       >
+        
+        {/* Main Title Animation - Delayed to let BG show first */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.5 }} 
-          className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
+          transition={{ delay: 1.2, duration: 1, ease: "easeOut" }} // Increased delay
+          className="mb-8"
         >
-          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-          <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-text-muted">System Online • v2.4</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-6">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-[10px] font-mono uppercase tracking-widest text-gray-300">System Nominal</span>
+          </div>
+          
+          <h1 className="text-6xl md:text-8xl font-display font-bold tracking-tighter mb-4">
+            COSMIC <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">WATCH</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mx-auto leading-relaxed">
+            Global Defense & Trajectory Analysis System for Near-Earth Objects.
+          </p>
         </motion.div>
 
-        <motion.h1 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.8 }}
-          className="text-5xl md:text-7xl font-display font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 drop-shadow-2xl"
+        {/* Feature Grid - Delayed Sequence */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.8, duration: 0.8 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl w-full"
         >
-          Planetary Defense <br />
-          <span className="text-white">Starts Here.</span>
-        </motion.h1>
+           {[
+             { icon: Globe, label: "Global Coverage", desc: "Full planetary monitoring" },
+             { icon: Activity, label: "Real-time Telemetry", desc: "Live velocity & distance data" },
+             { icon: ShieldCheck, label: "Risk Assessment", desc: "Impact probability analysis" }
+           ].map((item, idx) => (
+             <div key={idx} className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md flex flex-col items-center">
+               <item.icon className="w-6 h-6 text-blue-400 mb-2" />
+               <h3 className="font-semibold text-sm">{item.label}</h3>
+               <p className="text-xs text-gray-500 mt-1">{item.desc}</p>
+             </div>
+           ))}
+        </motion.div>
 
-        <motion.p 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.1 }}
-          className="text-lg md:text-xl text-text-muted font-light tracking-wide max-w-2xl mx-auto mb-12 leading-relaxed"
+        {/* The Activation Button */}
+        <motion.div
+           initial={{ opacity: 0, scale: 0.9 }}
+           animate={{ opacity: 1, scale: 1 }}
+           transition={{ delay: 2.2, duration: 0.5 }}
         >
-          Real-time monitoring of Near-Earth Objects (NEOs). Advanced risk analysis algorithms. 
-          Global threat assessment at your fingertips.
+          <motion.button
+            onClick={handleUplink}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-black rounded-full font-bold uppercase tracking-widest hover:bg-blue-50 transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(59,130,246,0.6)] cursor-pointer"
+          >
+            <Rocket className="w-5 h-5 group-hover:-rotate-45 transition-transform duration-300" />
+            <span>Establish Uplink</span>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </motion.button>
+        </motion.div>
+        
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2.5 }}
+          className="mt-6 text-[10px] text-gray-500 font-mono uppercase tracking-widest opacity-60"
+        >
+          Authorized Personnel Only • Secure Connection
         </motion.p>
 
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 2.4 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-16"
-        >
-          {[
-            { icon: Globe, label: "Global Coverage", desc: "NASA JPL Feed" },
-            { icon: ShieldCheck, label: "Risk Analysis", desc: "Hazard Detection" },
-            { icon: Activity, label: "Live Telemetry", desc: "Real-time Data" }
-          ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center p-4 rounded-2xl bg-black/30 border border-white/10 backdrop-blur-sm hover:bg-white/5 transition-colors">
-              <item.icon className="w-6 h-6 text-primary mb-2" />
-              <h3 className="text-sm font-semibold text-white">{item.label}</h3>
-              <p className="text-xs text-text-muted">{item.desc}</p>
-            </div>
-          ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.7 }}
-        >
-          <a onClick={handleInitialize} className="cursor-pointer group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-space-950 rounded-full font-bold tracking-tight hover:bg-gray-200 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]">
-            <span>Initialize Dashboard</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </a>
-        </motion.div>
       </motion.div>
-
-      <div className="absolute bottom-8 text-[10px] text-text-muted uppercase tracking-widest opacity-40 z-10">
-        Classified • For Authorized Personnel Only
-      </div>
     </div>
   );
 };
