@@ -1,6 +1,8 @@
-exports.calculateRisk = ({ diameter, velocity, distance }) => {
-  if (diameter > 1000 || distance < 500000) return "Critical";
-  if (diameter > 500 || distance < 1000000) return "High";
-  if (diameter > 200) return "Medium";
-  return "Low";
+exports.calculateRisk = (size, velocity, distance) => {
+  const score = size * 0.4 + velocity * 0.3 + (1 / distance) * 0.3;
+
+  if (score < 2) return "Low";
+  if (score < 4) return "Medium";
+  if (score < 6) return "High";
+  return "Critical";
 };
