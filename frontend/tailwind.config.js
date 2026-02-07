@@ -20,7 +20,6 @@ export default {
         danger: '#FF453A',  // iOS Red
         success: '#30D158', // iOS Green
         warning: '#FFD60A', // iOS Yellow
-        
         // Text Colors
         text: {
           main: '#FFFFFF',

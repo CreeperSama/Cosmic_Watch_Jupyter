@@ -22,7 +22,7 @@ const Navbar = () => {
         {/* Divider */}
         <div className="w-px h-5 bg-white/10 mx-1"></div>
 
-        {/* Navigation Links */}
+  {/* Navigation Links */}
         <div className="flex items-center gap-7 mr-2">
           <Link to="/" className="text-[13px] text-text-main font-semibold hover:text-white transition-colors">
             Monitor

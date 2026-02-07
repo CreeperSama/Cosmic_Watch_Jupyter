@@ -14,8 +14,7 @@ const AsteroidCard = ({ data }) => {
           <h3 className="text-lg font-display font-semibold text-white tracking-tight">{data.name}</h3>
           <p className="text-[11px] font-medium text-text-muted mt-0.5 uppercase tracking-wide">ID • {data.id}</p>
         </div>
-        
-        {/* Watch Button (Satisfies 'Track' Requirement) */}
+        {/* Watch Button */}
         <button 
           onClick={() => setIsWatched(!isWatched)}
           className={`p-2 rounded-full transition-all ${isWatched ? 'bg-primary text-white' : 'bg-white/5 text-text-muted hover:bg-white/20 hover:text-white'}`}
@@ -71,7 +70,7 @@ const AsteroidCard = ({ data }) => {
         </div>
       </div>
 
-      {/* Action Link */}
+  {/* Action Link */}
       <button className="flex items-center justify-between w-full pt-4 border-t border-white/5 text-[11px] font-medium text-text-muted group-hover:text-white transition-colors">
         <span>View Trajectory Analysis</span>
         <ArrowUpRight className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
