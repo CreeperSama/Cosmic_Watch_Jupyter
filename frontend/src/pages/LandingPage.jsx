@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Globe, ShieldCheck, Activity } from 'lucide-react';
 import EarthBackground from '../components/EarthBackground';
@@ -12,23 +12,19 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-white">
-      
-      {/* 1. BACKGROUND LAYER */}
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-white bg-space-950">
       <motion.div 
         className="absolute inset-0 z-0"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, transition: { duration: 0.5 } }} 
-        transition={{ duration: 2.5, ease: "easeOut" }}
+        transition={{ duration: 2.0, ease: "easeOut" }}
       >
         <EarthBackground />
       </motion.div>
 
-      {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-space-950 via-space-950/40 to-transparent pointer-events-none z-0"></div>
 
-      {/* 2. CONTENT LAYER (Opened as motion.div) */}
       <motion.div 
         className="relative z-10 max-w-5xl px-6 text-center"
         exit={{ 
@@ -38,8 +34,6 @@ const LandingPage = () => {
           transition: { duration: 0.5, ease: "easeInOut" }
         }}
       >
-        
-        {/* Badge */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,7 +44,6 @@ const LandingPage = () => {
           <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-text-muted">System Online • v2.4</span>
         </motion.div>
 
-        {/* Headline */}
         <motion.h1 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -61,7 +54,6 @@ const LandingPage = () => {
           <span className="text-white">Starts Here.</span>
         </motion.h1>
 
-        {/* Subtext */}
         <motion.p 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -72,7 +64,6 @@ const LandingPage = () => {
           Global threat assessment at your fingertips.
         </motion.p>
 
-        {/* Grid */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -92,7 +83,6 @@ const LandingPage = () => {
           ))}
         </motion.div>
 
-        {/* Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -103,9 +93,11 @@ const LandingPage = () => {
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </a>
         </motion.div>
-        
-      {/* FIX: Ensure we close with </motion.div>, not just </div> */}
       </motion.div>
+
+      <div className="absolute bottom-8 text-[10px] text-text-muted uppercase tracking-widest opacity-40 z-10">
+        Classified • For Authorized Personnel Only
+      </div>
     </div>
   );
 };

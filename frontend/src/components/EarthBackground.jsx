@@ -9,13 +9,12 @@ const Earth = () => {
   useFrame(({ clock }) => {
     const elapsedTime = clock.getElapsedTime();
     if (earthRef.current) {
-      earthRef.current.rotation.y = elapsedTime / 12; // Even slower for elegance
+      earthRef.current.rotation.y = elapsedTime / 12; 
     }
   });
 
   return (
     <mesh ref={earthRef} scale={[2.0, 2.0, 2.0]}> 
-      {/* OPTIMIZATION: Reduced segments from 64 to 32 */}
       <sphereGeometry args={[1, 32, 32]} />
       <meshStandardMaterial
         color="#0A84FF"
@@ -75,16 +74,12 @@ const EarthBackground = () => {
   return (
     <div className="absolute inset-0 z-0 pointer-events-none">
       <Canvas camera={{ position: [0, 0, 8], fov: 45 }} gl={{ antialias: false }}> 
-        {/* OPTIMIZATION: antialias: false makes it much faster */}
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} color="#0A84FF" />
-        
         <group position={[0, 0, 0]}> 
           <Earth />
         </group>
-        
         <AsteroidBelt />
-        {/* OPTIMIZATION: Reduced star count */}
         <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
       </Canvas>
     </div>

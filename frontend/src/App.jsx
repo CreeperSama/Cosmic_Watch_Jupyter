@@ -5,7 +5,6 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
 
-// Wrapper to handle Navbar visibility and Animations
 const AnimatedRoutes = () => {
   const location = useLocation();
   const showNavbar = location.pathname !== '/';
@@ -13,7 +12,6 @@ const AnimatedRoutes = () => {
   return (
     <>
       {showNavbar && <Navbar />}
-      {/* 'mode="wait"' ensures the old page leaves before new one enters */}
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<LandingPage />} />
