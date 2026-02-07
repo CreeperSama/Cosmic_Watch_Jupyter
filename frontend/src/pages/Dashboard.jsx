@@ -2,6 +2,48 @@ import { useEffect, useState } from 'react';
 import AsteroidCard from '../components/AsteroidCard';
 import { Loader2, RefreshCw, AlertTriangle, Satellite } from 'lucide-react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+
+// --- ANIMATIONS ---
+
+const pageVariants = {
+  initial: { opacity: 0, scale: 0.95 },
+  animate: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+  exit: { opacity: 0, scale: 1.05, transition: { duration: 0.3 } }
+};
+
+const gridVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15, // Delay between cards
+      delayChildren: 0.2
+    }
+  }
+};
+
+// NEW: "Holographic HUD Snap" Transition
+const cardVariants = {
+  hidden: { 
+    opacity: 0, 
+    scale: 0.8, 
+    rotateX: -45, // Tilted back
+    y: 50         // Pushed down
+  },
+  visible: { 
+    opacity: 1, 
+    scale: 1, 
+    rotateX: 0,   // Snaps upright
+    y: 0, 
+    transition: { 
+      type: "spring", 
+      stiffness: 120, // Snappy spring
+      damping: 12,    // Little bounce
+      mass: 0.8 
+    }
+  }
+};
 
 const Dashboard = () => {
   const [asteroids, setAsteroids] = useState([]);
@@ -13,12 +55,10 @@ const Dashboard = () => {
     setError(null);
     try {
       const today = new Date().toISOString().split('T')[0];
-      // Note: Ensure your backend is running on Port 5000
       const response = await axios.get(`http://localhost:5000/api/asteroids/feed?startDate=${today}&endDate=${today}`);
       setAsteroids(response.data);
     } catch (err) {
       console.warn("Deep Space Network offline. Switching to Simulation Data.");
-      // Fallback Data for UI testing/demos
       setAsteroids([
         { id: '1', name: '(2024 XR)', hazardous: true, diameter_km: 0.12, velocity_kph: 45000, miss_distance_km: 120000 },
         { id: '2', name: '(2021 GT3)', hazardous: false, diameter_km: 0.05, velocity_kph: 22000, miss_distance_km: 4500000 },
@@ -43,7 +83,13 @@ const Dashboard = () => {
   , asteroids[0] || {});
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-6 lg:px-12 max-w-[1600px] mx-auto">
+    <motion.div 
+      className="min-h-screen pt-32 pb-20 px-6 lg:px-12 max-w-[1600px] mx-auto"
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       
       {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12 border-b border-white/5 pb-12">
@@ -118,13 +164,24 @@ const Dashboard = () => {
           <p className="text-text-muted font-mono text-xs uppercase tracking-widest animate-pulse">Establishing Downlink...</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 perspective-1000" // Added perspective for 3D effect
+          variants={gridVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {asteroids.map((neo) => (
-            <AsteroidCard key={neo.id} data={neo} />
+            <motion.div 
+              key={neo.id} 
+              variants={cardVariants}
+              style={{ transformStyle: "preserve-3d" }} // Ensures 3D rotation works
+            >
+              <AsteroidCard data={neo} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
