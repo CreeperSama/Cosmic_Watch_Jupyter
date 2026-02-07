@@ -1,57 +1,15 @@
-// const axios = require("axios");
-// const { calculateRisk } = require("./riskService"); 
-
-// // Accept optional parameters for start/end date
-// exports.fetchAsteroids = async (startDate, endDate) => {
-//   try {
-//     const apiKey = process.env.NASA_API_KEY || "DEMO_KEY";
-    
-//     // Default to today if no date provided
-//     const today = new Date().toISOString().split('T')[0];
-//     const start = startDate || today;
-//     const end = endDate || start;
-
-//     console.log(`📡 Fetching NASA data from ${start} to ${end}`);
-
-//     const res = await axios.get('https://api.nasa.gov/neo/rest/v1/feed', {
-//       params: {
-//         start_date: start,
-//         end_date: end,
-//         api_key: apiKey
-//       }
-//     });
-
-//     const data = res.data.near_earth_objects || {};
-//     const cleaned = [];
-
-//     Object.values(data).forEach((day) => {
-//       day.forEach((ast) => {
-//         const diameterMeters = ast.estimated_diameter?.meters?.estimated_diameter_max || 0;
-//         const velocityKph = parseFloat(ast.close_approach_data?.[0]?.relative_velocity?.kilometers_per_hour) || 0;
-//         const distanceKm = parseFloat(ast.close_approach_data?.[0]?.miss_distance?.kilometers) || 0;
-
-//         cleaned.push({
-//           id: ast.id,
-//           name: ast.name,
-//           hazardous: ast.is_potentially_hazardous_asteroid,
-//           diameter: diameterMeters, 
-//           velocity: velocityKph,    
-//           distance: distanceKm,
-//           riskLevel: calculateRisk(diameterMeters, velocityKph, distanceKm)
-//         });
-//       });
-//     });
-
-//     return cleaned;
-//   } catch (err) {
-//     console.error("❌ NASA API Error:", err.message);
-//     throw new Error("Failed to retrieve asteroid data");
-//   }
-// };
-
 const axios = require("axios");
-const Asteroid = require("../models/Asteroid"); // Import our new model
+const Asteroid = require("../models/Asteroid");
 const { calculateRisk } = require("./riskService"); 
+
+// --- FALLBACK MOCK DATA (For when NASA API limits are hit) ---
+const MOCK_DATA = [
+  { id: "3542519", name: "(2010 PK9)", diameter: 260, velocity: 45000, distance: 7000000, hazardous: true, date: new Date().toISOString().split('T')[0] },
+  { id: "2000433", name: "433 Eros", diameter: 16840, velocity: 22000, distance: 26000000, hazardous: false, date: new Date().toISOString().split('T')[0] },
+  { id: "3729835", name: "(2015 KJ19)", diameter: 200, velocity: 89000, distance: 500000, hazardous: true, date: new Date().toISOString().split('T')[0] },
+  { id: "54017201", name: "(2021 GT3)", diameter: 45, velocity: 33000, distance: 120000, hazardous: false, date: new Date().toISOString().split('T')[0] },
+  { id: "2441987", name: "441987 (2010 NY65)", diameter: 220, velocity: 46000, distance: 3000000, hazardous: true, date: new Date().toISOString().split('T')[0] },
+];
 
 exports.fetchAsteroids = async (startDate, endDate) => {
   try {
@@ -62,30 +20,25 @@ exports.fetchAsteroids = async (startDate, endDate) => {
 
     console.log(`🔎 Checking Local Cache for ${start} to ${end}...`);
 
-    // 1. CACHE CHECK: Try to find data in MongoDB first
+    // 1. CACHE CHECK
     const cachedData = await Asteroid.find({
       date: { $gte: start, $lte: end }
     });
 
     if (cachedData.length > 0) {
-      console.log(`⚡ Cache Hit! Serving ${cachedData.length} asteroids from Database.`);
+      console.log(`⚡ Cache Hit! Serving ${cachedData.length} asteroids.`);
       return cachedData;
     }
 
-    // 2. CACHE MISS: Fetch from NASA
+    // 2. FETCH FROM NASA
     console.log(`📡 Cache Miss. Fetching live from NASA...`);
     const res = await axios.get('https://api.nasa.gov/neo/rest/v1/feed', {
-      params: {
-        start_date: start,
-        end_date: end,
-        api_key: apiKey
-      }
+      params: { start_date: start, end_date: end, api_key: apiKey }
     });
 
     const rawData = res.data.near_earth_objects || {};
     const asteroidsToSave = [];
 
-    // 3. Process Data
     Object.entries(rawData).forEach(([dateKey, asteroids]) => {
       asteroids.forEach((ast) => {
         const diameterMeters = ast.estimated_diameter?.meters?.estimated_diameter_max || 0;
@@ -95,7 +48,7 @@ exports.fetchAsteroids = async (startDate, endDate) => {
         asteroidsToSave.push({
           id: ast.id,
           name: ast.name,
-          date: dateKey, // Important: Save the specific date
+          date: dateKey,
           hazardous: ast.is_potentially_hazardous_asteroid,
           diameter: diameterMeters,
           velocity: velocityKph,
@@ -105,26 +58,26 @@ exports.fetchAsteroids = async (startDate, endDate) => {
       });
     });
 
-    // 4. Save to Database (Bulk Insert)
     if (asteroidsToSave.length > 0) {
-      try {
-        // ordered: false prevents the batch from stopping if one duplicate ID exists
-        await Asteroid.insertMany(asteroidsToSave, { ordered: false });
-        console.log(`💾 Cached ${asteroidsToSave.length} new asteroids to Database.`);
-      } catch (insertError) {
-        // Ignore duplicate key errors (code 11000), log others
-        if (insertError.code !== 11000) {
-          console.error("Cache save warning:", insertError.message);
-        }
-      }
+      await Asteroid.insertMany(asteroidsToSave, { ordered: false }).catch(() => {}); // Ignore dupes
+      console.log(`💾 Cached ${asteroidsToSave.length} items.`);
     }
 
     return asteroidsToSave;
 
   } catch (err) {
-    console.error("❌ Data Service Error:", err.message);
-    // Fallback: If DB has *some* data, return that instead of crashing
-    // (Optional advanced logic, for now we just throw)
-    throw new Error("Failed to retrieve asteroid data");
+    // --- 3. FAILSAFE MODE ---
+    if (err.response && err.response.status === 429) {
+      console.warn("⚠️ NASA RATE LIMIT REACHED. SWITCHING TO SIMULATION MODE.");
+      
+      // Enhance mock data with Risk Calculation
+      return MOCK_DATA.map(m => ({
+        ...m,
+        riskLevel: calculateRisk(m.diameter, m.velocity, m.distance)
+      }));
+    }
+    
+    console.error("❌ NASA Service Error:", err.message);
+    throw err;
   }
 };
