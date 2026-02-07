@@ -1,10 +1,6 @@
 import { Link } from 'react-router-dom';
 import { User } from 'lucide-react';
-<<<<<<< HEAD
-import Logo from './Logo'; // Import your new custom logo
-=======
 import Logo from './Logo';
->>>>>>> frontend
 
 const Navbar = () => {
   return (
@@ -26,11 +22,7 @@ const Navbar = () => {
         {/* Divider */}
         <div className="w-px h-5 bg-white/10 mx-1"></div>
 
-<<<<<<< HEAD
-        {/* Navigation */}
-=======
-        {/* Navigation Links */}
->>>>>>> frontend
+  {/* Navigation Links */}
         <div className="flex items-center gap-7 mr-2">
           <Link to="/" className="text-[13px] text-text-main font-semibold hover:text-white transition-colors">
             Monitor

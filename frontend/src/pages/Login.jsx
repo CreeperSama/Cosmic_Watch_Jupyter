@@ -5,12 +5,6 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-<<<<<<< HEAD
-    // Added 'pt-32' to push content down below the fixed Navbar
-    // Changed 'min-h-screen' to ensure full height coverage
-=======
-    // Corrected padding-top (pt-32) to clear the Navbar
->>>>>>> frontend
     <div className="min-h-screen flex items-center justify-center px-4 pt-32 pb-12 relative overflow-hidden">
       
       {/* Decorative background circle */}
@@ -19,11 +13,7 @@ const Login = () => {
       {/* Main Card Container */}
       <div className="w-full max-w-md px-8 pb-8 pt-10 bg-space-800/80 backdrop-blur-xl border border-space-700 rounded-2xl shadow-2xl relative overflow-hidden z-10">
         
-<<<<<<< HEAD
-        {/* Top Accent Line (Thinned down) */}
-=======
-        {/* Top Accent Line (Subtle) */}
->>>>>>> frontend
+  {/* Top Accent Line (Subtle) */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-80"></div>
 
         <h2 className="relative z-10 text-3xl font-orbitron font-bold text-center text-white mb-2">

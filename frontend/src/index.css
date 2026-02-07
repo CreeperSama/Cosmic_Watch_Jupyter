@@ -1,34 +1,10 @@
-<<<<<<< HEAD
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
-=======
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@400;500;600;700&display=swap');
->>>>>>> frontend
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-<<<<<<< HEAD
-  background-color: #000000;
-  /* Subtle atmospheric glow instead of pixelated stars */
-  background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #000000 60%);
-  color: #E8EAED;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Custom Scrollbar for that "App" feel */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
-=======
   @apply bg-space-950 text-text-main font-sans antialiased overflow-x-hidden;
   background-image: 
     radial-gradient(circle at 50% 0%, rgba(10, 132, 255, 0.15) 0%, transparent 50%),
@@ -49,5 +25,4 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #334155;
->>>>>>> frontend
 }
