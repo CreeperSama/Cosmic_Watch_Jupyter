@@ -1,16 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <h1 className='bg-red-400'>hello world</h1>
-    </>
-  )
+    <Router>
+      {/* Navbar is persistent across all pages */}
+      <Navbar />
+      
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
