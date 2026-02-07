@@ -23,7 +23,11 @@ const Logo = ({ className = "w-8 h-8" }) => {
       {/* Main Celestial Body */}
       <circle cx="50" cy="50" r="22" fill="currentColor" />
       
+<<<<<<< HEAD
       {/* Tracking Satellite Dot */}
+=======
+      {/* Tracking Satellite Dot (Animated) */}
+>>>>>>> frontend
       <circle cx="88" cy="33" r="4" fill="#0A84FF">
         <animate 
           attributeName="opacity" 

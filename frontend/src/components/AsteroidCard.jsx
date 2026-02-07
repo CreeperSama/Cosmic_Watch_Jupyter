@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import { useState } from 'react'; // Added state for interaction
+=======
+import { useState } from 'react';
+>>>>>>> frontend
 import { ArrowUpRight, AlertCircle, Circle, Star } from 'lucide-react';
 
 const AsteroidCard = ({ data }) => {
   const isHazardous = data.hazardous;
+<<<<<<< HEAD
   const [isWatched, setIsWatched] = useState(false); // Local state for demo
+=======
+  const [isWatched, setIsWatched] = useState(false);
+>>>>>>> frontend
 
   return (
     <div className={`group relative bg-surface-glass backdrop-blur-md border rounded-2xl p-5 transition-all duration-300 hover:bg-white/10 ${isWatched ? 'border-primary/50 shadow-[0_0_20px_rgba(10,132,255,0.1)]' : 'border-white/5'}`}>
@@ -15,7 +23,11 @@ const AsteroidCard = ({ data }) => {
           <p className="text-[11px] font-medium text-text-muted mt-0.5 uppercase tracking-wide">ID • {data.id}</p>
         </div>
         
+<<<<<<< HEAD
         {/* Watch Button (New Requirement) */}
+=======
+        {/* Watch Button (Satisfies 'Track' Requirement) */}
+>>>>>>> frontend
         <button 
           onClick={() => setIsWatched(!isWatched)}
           className={`p-2 rounded-full transition-all ${isWatched ? 'bg-primary text-white' : 'bg-white/5 text-text-muted hover:bg-white/20 hover:text-white'}`}
@@ -71,7 +83,11 @@ const AsteroidCard = ({ data }) => {
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* Action: Subtle Link */}
+=======
+      {/* Action Link */}
+>>>>>>> frontend
       <button className="flex items-center justify-between w-full pt-4 border-t border-white/5 text-[11px] font-medium text-text-muted group-hover:text-white transition-colors">
         <span>View Trajectory Analysis</span>
         <ArrowUpRight className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
