@@ -5,23 +5,27 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center px-4 relative">
+    // Added 'pt-32' to push content down below the fixed Navbar
+    // Changed 'min-h-screen' to ensure full height coverage
+    <div className="min-h-screen flex items-center justify-center px-4 pt-32 pb-12 relative overflow-hidden">
+      
       {/* Decorative background circle */}
       <div className="absolute w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-3xl -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
 
-      <div className="w-full max-w-md p-8 bg-space-800/50 backdrop-blur-xl border border-space-700 rounded-2xl shadow-2xl relative overflow-hidden">
+      {/* Main Card Container */}
+      <div className="w-full max-w-md px-8 pb-8 pt-10 bg-space-800/80 backdrop-blur-xl border border-space-700 rounded-2xl shadow-2xl relative overflow-hidden z-10">
         
-        {/* Top Accent Line */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
+        {/* Top Accent Line (Thinned down) */}
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-80"></div>
 
-        <h2 className="text-3xl font-orbitron font-bold text-center text-white mb-2">
+        <h2 className="relative z-10 text-3xl font-orbitron font-bold text-center text-white mb-2">
           {isLogin ? 'Researcher Access' : 'New Clearance'}
         </h2>
-        <p className="text-center text-space-accent text-sm mb-8 opacity-70">
+        <p className="relative z-10 text-center text-space-accent text-sm mb-8 opacity-70">
           {isLogin ? 'Enter credentials for secure connection' : 'Apply for mission tracking authorization'}
         </p>
         
-        <form className="space-y-5">
+        <form className="space-y-5 relative z-10">
           {!isLogin && (
              <div>
               <label className="flex items-center gap-2 text-xs font-bold text-space-accent uppercase tracking-wider mb-2">
@@ -51,7 +55,7 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-space-700/50 text-center">
+        <div className="mt-8 pt-6 border-t border-space-700/50 text-center relative z-10">
           <p className="text-sm text-gray-400">
             {isLogin ? "Don't have clearance? " : "Already verified? "}
             <button onClick={() => setIsLogin(!isLogin)} className="text-cyan-400 hover:text-cyan-300 font-bold hover:underline transition-all ml-1">
