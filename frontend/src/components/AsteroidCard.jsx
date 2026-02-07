@@ -2,7 +2,22 @@ import { useState } from 'react';
 import { ArrowUpRight, AlertCircle, Circle, Star } from 'lucide-react';
 
 const AsteroidCard = ({ data }) => {
-  const isHazardous = data.hazardous;
+  // --- DATA NORMALIZATION START ---
+  // We map the backend keys (diameter, velocity, distance) to your UI keys
+  const safeData = {
+    id: data.id || "Unknown",
+    name: data.name || "Unknown Asteroid",
+    hazardous: data.hazardous || false,
+    // Backend sends meters, convert to KM for display
+    diameter_km: data.diameter ? data.diameter / 1000 : 0, 
+    // Backend sends 'velocity', map to 'velocity_kph'
+    velocity_kph: data.velocity || 0,
+    // Backend sends 'distance', map to 'miss_distance_km'
+    miss_distance_km: data.distance || 0
+  };
+  // --- DATA NORMALIZATION END ---
+
+  const isHazardous = safeData.hazardous;
   const [isWatched, setIsWatched] = useState(false);
 
   return (
@@ -11,8 +26,8 @@ const AsteroidCard = ({ data }) => {
       {/* Top Row: Identification & Status */}
       <div className="flex justify-between items-start mb-6">
         <div>
-          <h3 className="text-lg font-display font-semibold text-white tracking-tight">{data.name}</h3>
-          <p className="text-[11px] font-medium text-text-muted mt-0.5 uppercase tracking-wide">ID • {data.id}</p>
+          <h3 className="text-lg font-display font-semibold text-white tracking-tight">{safeData.name}</h3>
+          <p className="text-[11px] font-medium text-text-muted mt-0.5 uppercase tracking-wide">ID • {safeData.id}</p>
         </div>
         {/* Watch Button */}
         <button 
@@ -43,14 +58,14 @@ const AsteroidCard = ({ data }) => {
         <div className="flex flex-col border-l border-white/10 pl-3">
           <span className="text-[10px] font-medium text-text-muted uppercase tracking-wider mb-1">Diameter</span>
           <span className="text-xl font-light text-white tracking-tight">
-            {Number(data.diameter_km).toFixed(3)} <span className="text-xs text-text-muted font-normal ml-0.5">km</span>
+            {Number(safeData.diameter_km).toFixed(3)} <span className="text-xs text-text-muted font-normal ml-0.5">km</span>
           </span>
         </div>
         
         <div className="flex flex-col border-l border-white/10 pl-3">
           <span className="text-[10px] font-medium text-text-muted uppercase tracking-wider mb-1">Velocity</span>
           <span className="text-xl font-light text-white tracking-tight">
-            {(Number(data.velocity_kph)/1000).toFixed(1)}k <span className="text-xs text-text-muted font-normal ml-0.5">km/h</span>
+            {(Number(safeData.velocity_kph)/1000).toFixed(1)}k <span className="text-xs text-text-muted font-normal ml-0.5">km/h</span>
           </span>
         </div>
       </div>
@@ -59,13 +74,13 @@ const AsteroidCard = ({ data }) => {
       <div className="mb-5 pt-2">
         <div className="flex justify-between items-end mb-2">
           <span className="text-[10px] font-medium text-text-muted uppercase tracking-wider">Miss Distance</span>
-          <span className="text-[11px] font-medium text-white font-mono">{Number(data.miss_distance_km).toLocaleString()} km</span>
+          <span className="text-[11px] font-medium text-white font-mono">{Number(safeData.miss_distance_km).toLocaleString()} km</span>
         </div>
         
         <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
           <div 
             className={`h-full rounded-full transition-all duration-1000 ${isHazardous ? 'bg-danger' : 'bg-primary'}`} 
-            style={{ width: `${Math.min((384400 / data.miss_distance_km) * 100, 100)}%` }}
+            style={{ width: `${Math.min((384400 / (safeData.miss_distance_km || 1)) * 100, 100)}%` }}
           />
         </div>
       </div>
