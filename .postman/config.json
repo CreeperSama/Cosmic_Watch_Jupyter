@@ -1,0 +1,15 @@
+{
+  "workspace": {
+    "id": "e007e15f-0f9e-47e3-a860-ad6e434bc3e6"
+  },
+  "entities": {
+    "environments": [],
+    "flows": [],
+    "globals": [],
+    "mocks": [],
+    "specs": [],
+    "collections": [
+      "..\\CosmicWatch_API_Collection.json"
+    ]
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "info": {
+    "_postman_id": "12d86580-70be-4c20-aa8f-009bcc56313f",
+    "name": "Cosmic Watch API (Fixed) Copy",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Auth",
+      "item": [
+        {
+          "name": "Sign Up (Researcher)",
+          "id": "28e68a21-11d7-4dd5-809d-9d3aeb848cbc",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Dr. Stone\",\n    \"email\": \"senku@science.org\",\n    \"password\": \"password123\",\n    \"role\": \"researcher\",\n    \"affiliation\": \"Kingdom of Science\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/auth/signup",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.environment.set(\"authToken\", jsonData.token);"
+                ],
+                "type": "text/javascript",
+                "id": "7c46620e-f649-4e1e-9fa7-cbd6a6ab2446"
+              }
+            }
+          ],
+          "id": "0e0b5818-5f53-4d33-802d-72dd8ac87575",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"senku@science.org\",\n    \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "0a8bd1a6-092e-4f23-860f-5651a98610e6"
+    },
+    {
+      "name": "2. Data",
+      "item": [
+        {
+          "name": "Get Asteroids",
+          "id": "da31922f-1142-4ce3-8840-ff7d6878ced0",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/nasa/asteroids?start_date=2024-01-01&end_date=2024-01-02",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "nasa",
+                "asteroids"
+              ],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2024-01-02"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "a60451f7-020d-406e-ac0a-db5b65d83b26"
+    },
+    {
+      "name": "3. Alerts",
+      "item": [
+        {
+          "name": "Get Notifications",
+          "id": "33e9d8a1-20ca-4eb8-8904-620dbef13b02",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/notifications",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "notifications"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "933a8548-270d-411c-a0c8-f3b0ba88b086"
+    }
+  ]
+}
